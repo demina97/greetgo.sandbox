@@ -13,22 +13,20 @@
 
     <tr *ngFor="let record of list" [ngClass]="{active: selectedId === record.id}" (click)="selectedId = record.id">
       <td>{{record.fio}}</td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
+      <td>{{record.charm}}</td>
+      <td>{{record.age}}</td>
+      <td>{{record.totalBalance}}</td>
+      <td>{{record.maxBalance}}</td>
+      <td>{{record.minBalance}}</td>
     </tr>
 
     </tbody>
   </table>
   <div>
     <button class="buttonStyle editingButtons" (click)="addClient()">+</button>
-  </div>
-  <div>
+
     <button class="buttonStyle editingButtons" (click)="editClient()" [disabled]="!selectedId">...</button>
-  </div>
-  <div>
+
     <button class="buttonStyle editingButtons">-</button>
   </div>
 

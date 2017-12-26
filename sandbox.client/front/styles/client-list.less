@@ -1,57 +1,48 @@
 table.client-list {
+  position: relative;
   font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif, serif;
   font-size: 14px;
   border-collapse: collapse;
   text-align: center;
   margin-left: 25%;
-  margin-top: 2%;
 
   th, td {
     color: white;
+    padding: 10px 20px;
   }
 
   td {
     background: #AFCDE7;
-    padding: 10px 20px;
   }
 
   th {
     background-color: #00415d;
-
-    padding: 0.3rem;
   }
-
 
   th:first-child, td:first-child {
     text-align: left;
   }
 
   tr.active td {
-    background-color: #1CA347;
+    background-color: #00415d + #555555;
   }
 }
-
 
 body {
   background-color: aliceblue;
 }
 
-.buttonStyle {
-  text-align: center;
-  font-size: 15px;
-}
-
 .editingButtons {
-  margin-left: 65%;
-  margin-bottom: 10%;
-  font-size: 20px;
+  margin-left: 80%;
+  margin-bottom: 1%;
+  font-size: 12px;
 }
 
 .buttonStyle {
   display: inline-block;
   color: #00415d;
   text-decoration: none;
-  padding: .5em 2em;
+  padding: 0.5em 2em;
   outline: none;
   border-width: 2px 0;
   border-style: solid none;
@@ -59,8 +50,24 @@ body {
   border-radius: 6px;
   background: linear-gradient(#53A3CD, #ffffff) #53A3CD;
   transition: 0.2s;
+  text-align: center;
+  font-size: 15px;
 }
 
 .buttonStyle:hover {
   background: linear-gradient(#53A3CD, #AFCDE7) #53A3CD;
+}
+
+.caption {
+  float: left;
+  width: 20%;
+  margin-left: 5%;
+}
+
+#exitButton {
+  float: left;
+  text-align: right;
+  width: 10%;
+  margin-top: 1%;
+  margin-left: 60%;
 }
