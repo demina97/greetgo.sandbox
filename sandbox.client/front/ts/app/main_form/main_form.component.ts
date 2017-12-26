@@ -6,17 +6,13 @@ import {HttpService} from "../HttpService";
   selector: 'main-form-component',
   template: `
     <div>
-      <h2>Main Form Component</h2>
-
-      <button class="buttonStyle" (click)="exit.emit()">Выход</button>
-
-      <div *ngIf="!userInfo">
-        <button class="buttonStyle" [disabled]="!loadUserInfoButtonEnabled" (click)="loadUserInfoButtonClicked()">
-          Загрузить данные пользователя
-        </button>
-        <div *ngIf="loadUserInfoError">
-          {{loadUserInfoError}}
-        </div>
+      
+      <div class="caption">
+        <h2>Main Form Component</h2>
+      </div>
+      
+      <div id="exitButton" >
+        <button class="buttonStyle" (click)="exit.emit()">Выход</button>
       </div>
       
       <client-list></client-list>
@@ -25,8 +21,6 @@ import {HttpService} from "../HttpService";
 })
 export class MainFormComponent {
   @Output() exit = new EventEmitter<void>();
-
-
 
   userInfo: UserInfo | null = null;
   loadUserInfoButtonEnabled: boolean = true;
