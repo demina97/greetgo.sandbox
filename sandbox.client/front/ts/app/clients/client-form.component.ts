@@ -12,16 +12,10 @@ export class ClientFormComponent implements OnInit {
   client: ClientDetailsRecord = new ClientDetailsRecord();
   charms: string[] = ["Сангвиник", "Холерик", "Флегматик", "Меланхолик"];
 
-  @Output() closeModal = new EventEmitter<void>();
-
   constructor(private httpService: HttpService) {}
 
   ngOnInit(): void {
 
-  }
-
-  closeModalForm() {
-    this.closeModal.emit();
   }
 
   clientId: string | null;

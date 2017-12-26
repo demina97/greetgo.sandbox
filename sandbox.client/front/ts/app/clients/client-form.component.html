@@ -1,10 +1,8 @@
-<div class="main-form">
-  <div *ngIf="shown">
-
+<div class="main-form" *ngIf="shown">
     <div class="title" *ngIf="!!clientId">Изменение клиента</div>
     <div class="title" *ngIf="!clientId">Создание клиента</div>
 
-    <div class="content">
+  <div class="content">
       <div class="field">
         <label>Фамилия</label>
         <input name="surname" type="text" ngModel="{{client.surname}}"/>
@@ -84,5 +82,4 @@
         <button class="modalButtons" (click)="shown = false">Закрыть</button>
       </div>
     </div>
-  </div>
 </div>
