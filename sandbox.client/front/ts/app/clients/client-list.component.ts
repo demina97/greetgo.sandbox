@@ -36,5 +36,4 @@ export class ClientListComponent implements OnInit {
   editClient() {
     this.clientForm.show(this.selectedId);
   }
-
 }

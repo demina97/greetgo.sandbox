@@ -1,8 +1,9 @@
 <div class="main-form" *ngIf="shown">
+  <div class="content">
+
     <div class="title" *ngIf="!!clientId">Изменение клиента</div>
     <div class="title" *ngIf="!clientId">Создание клиента</div>
 
-  <div class="content">
       <div class="field">
         <label>Фамилия</label>
         <input name="surname" type="text" ngModel="{{client.surname}}"/>
