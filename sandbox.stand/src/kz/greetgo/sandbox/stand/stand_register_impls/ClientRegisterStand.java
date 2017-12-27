@@ -1,24 +1,39 @@
 package kz.greetgo.sandbox.stand.stand_register_impls;
 
 import kz.greetgo.depinject.core.Bean;
+import kz.greetgo.depinject.core.BeanGetter;
+import kz.greetgo.sandbox.controller.model.ClientListDetails;
 import kz.greetgo.sandbox.controller.model.ClientRecord;
 import kz.greetgo.sandbox.controller.register.ClientRegister;
+import kz.greetgo.sandbox.db.stand.beans.StandDb;
+import kz.greetgo.sandbox.db.stand.model.ClientDot;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Bean
 public class ClientRegisterStand implements ClientRegister {
-  @Override
-  public List<ClientRecord> list() {
-    List<ClientRecord> ret = new ArrayList<>();
-    ret.add(record("a10", "Иванов Иван", "Сангвиник", 27, 100000, 150000, 50000));
-    ret.add(record("a11", "Петров Иван", "Меланхолик", 45, 200000, 250000, 150000));
-    ret.add(record("a12", "Сидоров Иван", "Холерик", 20, 75000, 100000,25000 ));
-    ret.add(record("a13", "Абрамов Иван", "Флегматик", 30, 120000, 200000, 2000));
-    return ret;
-  }
 
+  public BeanGetter<StandDb> db;
+
+  @Override
+  public ClientListDetails getClientList() {
+    ClientListDetails clientListDetails=new ClientListDetails();
+
+    db.get().clientStorage.values().forEach(r->
+      clientListDetails.clientInfoList.add(ClientRecord
+      .newBuilder()
+      .setId(r.id)
+      .setFio(r.fio)
+      .setCharm(r.charm)
+      .setAge(r.age)
+      .setTotalBalance(r.totalBalance)
+      .setMaxBalance(r.maxBalance)
+      .setMinBalance(r.minBalance).build()));
+
+    return clientListDetails;
+  }
+/*
   private ClientRecord record(String id, String fio, String charm, int age, int totalBalance, int maxBalance, int minBalance) {
     ClientRecord ret = new ClientRecord();
     ret.id = id;
@@ -29,5 +44,5 @@ public class ClientRegisterStand implements ClientRegister {
     ret.maxBalance = maxBalance;
     ret.minBalance = minBalance;
     return ret;
-  }
+  }*/
 }

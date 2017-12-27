@@ -18,11 +18,8 @@ export class ClientListComponent implements OnInit {
 
   ngOnInit(): void {
     this.httpService.get("/client/list").toPromise().then(result => {
-
-      this.list = result.json().map(a => ClientRecord.copy(a));
-
+      this.list = result.json().clientInfoList.map(a => ClientRecord.copy(a));
       console.log(this.list);
-
     }, error => {
       console.log(error);
     });
