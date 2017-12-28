@@ -6,11 +6,11 @@ export class ClientDetailsRecord{
   public birth_date: string;
   public charm: string;
   public factAddrStreet: string;
-  public factAddrHouse: number/*int*/;
-  public factAddrFlat: number/*int*/;
+  public factAddrHouse: string;
+  public factAddrFlat: string;
   public regAddrStreet: string;
-  public regAddrHouse: number/*int*/;
-  public regAddrFlat: number/*int*/;
+  public regAddrHouse: string;
+  public regAddrFlat: string;
   public homePhone: string;
   public workPhone: string;
   public mobilePhone: string;
