@@ -2,22 +2,33 @@ package kz.greetgo.sandbox.db.stand.beans;
 
 import kz.greetgo.depinject.core.Bean;
 import kz.greetgo.depinject.core.HasAfterInject;
-import kz.greetgo.sandbox.db.stand.model.ClientDot;
-import kz.greetgo.sandbox.db.stand.model.PersonDot;
-
+import kz.greetgo.sandbox.controller.model.AddressType;
+import kz.greetgo.sandbox.controller.model.Gender;
+import kz.greetgo.sandbox.controller.model.PhoneType;
+import kz.greetgo.sandbox.db.stand.model.*;
+import org.fest.util.Lists;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
 @Bean
 public class StandDb implements HasAfterInject {
   public final Map<String, PersonDot> personStorage = new HashMap<>();
   public final Map<String, ClientDot> clientStorage = new HashMap<>();
+  public final Map<String, ClientAddressDot> addressStorage = new HashMap<>();
+  public final Map<String, List<ClientAddressDot>> clientAddressMapStorage = new HashMap<>();
+  public final Map<String, ClientPhoneDot> phoneStorage = new HashMap<>();
+  public final Map<String, List<ClientPhoneDot>> phoneClientMapStorage = new HashMap<>();
+  public final Map<String, CharmDot> charmStorage = new HashMap<>();
+  public final Map<String, List<ClientDot>> charmClientMapStorage = new HashMap<>();
 
-  public final AtomicLong clientSeq=new AtomicLong(1);
+  public final AtomicInteger clientSeq = new AtomicInteger(1);
 
   @Override
   public void afterInject() throws Exception {
@@ -64,58 +75,66 @@ public class StandDb implements HasAfterInject {
     personStorage.put(p.id, p);
   }
 
-  private void prepareData(){
-    clientStorage.put(clientSeq.get()+"",
-                          ClientDot
-                            .newBuilder()
-                            .setId(clientSeq.incrementAndGet() + "")
-                            .setFio("Семенов Егор Петрович")
-                            .setCharm("Сангвиник")
-                            .setAge(23)
-                            .setTotalBalance(120000)
-                            .setMaxBalance(200000)
-                            .setMinBalance(50000).build());
-    clientStorage.put(clientSeq.get()+"",
-                          ClientDot
-                            .newBuilder()
-                            .setId(clientSeq.incrementAndGet() + "")
-                            .setFio("Петров Егор Семенович")
-                            .setCharm("Холерик")
-                            .setAge(29)
-                            .setTotalBalance(100000)
-                            .setMaxBalance(180000)
-                            .setMinBalance(30000).build());
-    clientStorage.put(clientSeq.get()+"",
-                          ClientDot
-                            .newBuilder()
-                            .setId(clientSeq.incrementAndGet() + "")
-                            .setFio("Егоров Семен Петрович")
-                            .setCharm("Меланхолик")
-                            .setAge(37)
-                            .setTotalBalance(130000)
-                            .setMaxBalance(210000)
-                            .setMinBalance(60000).build());
-    clientStorage.put(clientSeq.get()+"",
-                          ClientDot
-                            .newBuilder()
-                            .setId(clientSeq.incrementAndGet() + "")
-                            .setFio("Семенов Петр Егорович")
-                            .setCharm("Флегматик")
-                            .setAge(24)
-                            .setTotalBalance(120000)
-                            .setMaxBalance(190000)
-                            .setMinBalance(20000).build());
-    clientStorage.put(clientSeq.get()+"",
-                          ClientDot
-                            .newBuilder()
-                            .setId(clientSeq.incrementAndGet() + "")
-                            .setFio("Егоров Петр Семерович")
-                            .setCharm("Холерик")
-                            .setAge(28)
-                            .setTotalBalance(90000)
-                            .setMaxBalance(180000)
-                            .setMinBalance(30000).build());
-  }
+  private void prepareData() {
+    charmStorage.put("1", CharmDot.newBuilder().setCharm(1).setName("").setDescription("").setEnergy(1.1f).build());
+    charmStorage.put("2", CharmDot.newBuilder().setCharm(2).setName("").setDescription("").setEnergy(1.2f).build());
+    charmStorage.put("3", CharmDot.newBuilder().setCharm(3).setName("").setDescription("").setEnergy(1.3f).build());
+    charmStorage.put("4", CharmDot.newBuilder().setCharm(4).setName("").setDescription("").setEnergy(1.4f).build());
+    charmStorage.put("5", CharmDot.newBuilder().setCharm(5).setName("").setDescription("").setEnergy(1.5f).build());
+    int l = clientSeq.getAndIncrement();
+    clientStorage.put(l+"", ClientDot.newBuilder()
+                              .setId(l)
+                              .setSurname("")
+                              .setName("")
+                              .setPatronymic("")
+                              .setGender(Gender.MALE)
+                              .setBirth_date(new Date())
+                              .setCharm(1)
+                              .build());
+    addressStorage.put(l+"", ClientAddressDot.newBuilder()
+                              .setClient(l)
+                              .setType(AddressType.REG)
+                              .setStreet("")
+                              .setHouse("")
+                              .setFlat("").build());
+    addressStorage.put(l+"", ClientAddressDot.newBuilder()
+                              .setClient(l)
+                              .setType(AddressType.FACT)
+                              .setStreet("")
+                              .setHouse("")
+                              .setFlat("").build());
+    phoneStorage.put(l+"", ClientPhoneDot.newBuilder().setClient(l).setNumber("").setType(PhoneType.HOME).build());
+    phoneStorage.put(l+"", ClientPhoneDot.newBuilder().setClient(l).setNumber("").setType(PhoneType.MOBILE).build());
+    phoneStorage.put(l+"", ClientPhoneDot.newBuilder().setClient(l).setNumber("").setType(PhoneType.WORK).build());
+    /*List<ClientDot> charmClientList = Lists.newArrayList();
+    for (int i = 0; i < 5; i++) {
 
+      ClientDot build = ClientDot
+        .newBuilder()
+        .setId(l)
+        .setSurname("Петров " + i)
+        .setName("Семен " + i)
+        .setPatronymic("Егорович " + i)
+        .setGender(Gender.MALE)
+        .setBirth_date(new Date())
+        .setCharm(charm).build();
+
+      clientStorage.put(l + "",
+        build);
+      charmClientList.add(build);
+    }
+    charmClientMapStorage.put(charm + "", charmClientList);
+
+    List<ClientDot> charmClientList2 = Lists.newArrayList();
+
+    for (ClientDot clientDot : clientStorage.values()) {
+      if (clientDot.charm == charm) {
+        charmClientList2.add(clientDot);
+      }
+    }
+
+    List<ClientDot> charmClientList3 = charmClientMapStorage.get(charm + "");*/
+
+  }
 
 }

@@ -1,57 +1,65 @@
 package kz.greetgo.sandbox.db.stand.model;
 
-import kz.greetgo.sandbox.controller.model.ClientRecord;
+import kz.greetgo.sandbox.controller.model.Gender;
+
+import java.util.Date;
 
 public class ClientDot {
-  public String id, fio,  charm;
-  public int age,  totalBalance,  maxBalance, minBalance;
+  public int id;
+  public String surname;
+  public String name;
+  public String patronymic;
+  public Gender gender;
+  public Date birth_date;
+  public int charm;
 
-  private ClientDot() { }
+  private ClientDot() {}
 
-  public static Builder newBuilder(){
+  public static Builder newBuilder() {
     return new ClientDot().new Builder();
   }
 
-  public class Builder{
+  public class Builder {
     private Builder() {}
 
-    public Builder setId(String id){
+    public Builder setId(int id) {
       ClientDot.this.id = id;
       return this;
     }
 
-    public Builder setFio(String fio){
-      ClientDot.this.fio = fio;
+    public Builder setSurname(String surname) {
+      ClientDot.this.surname = surname;
       return this;
     }
 
-    public Builder setCharm(String charm){
+    public Builder setName(String name) {
+      ClientDot.this.name = name;
+      return this;
+    }
+
+    public Builder setPatronymic(String patronymic) {
+      ClientDot.this.patronymic = patronymic;
+      return this;
+    }
+
+    public Builder setGender(Gender gender) {
+      ClientDot.this.gender = gender;
+      return this;
+    }
+
+    public Builder setBirth_date(Date birth_date) {
+      ClientDot.this.birth_date = birth_date;
+      return this;
+    }
+
+    public Builder setCharm(int charm) {
       ClientDot.this.charm = charm;
       return this;
     }
 
-    public Builder setAge(int age){
-      ClientDot.this.age = age;
-      return this;
-    }
-
-    public Builder setTotalBalance(int totalBalance){
-      ClientDot.this.totalBalance = totalBalance;
-      return this;
-    }
-
-    public Builder setMaxBalance(int maxBalance){
-      ClientDot.this.maxBalance = maxBalance;
-      return this;
-    }
-
-    public Builder setMinBalance(int minBalance){
-      ClientDot.this.minBalance = minBalance;
-      return this;
-    }
-
-    public ClientDot build(){
+    public ClientDot build() {
       return ClientDot.this;
     }
+
   }
 }
