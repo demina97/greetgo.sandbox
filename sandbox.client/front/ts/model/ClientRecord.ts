@@ -3,9 +3,9 @@ export class ClientRecord {
   public fio: string;
   public charm: string;
   public age: number /*int*/;
-  public totalBalance: number /*int*/;
-  public maxBalance: number /*int*/;
-  public minBalance: number /*int*/;
+  public totalBalance: number /*float*/;
+  public maxBalance: number /*float*/;
+  public minBalance: number /*float*/;
 
   assign(a: any) {
     this.id = a.id;

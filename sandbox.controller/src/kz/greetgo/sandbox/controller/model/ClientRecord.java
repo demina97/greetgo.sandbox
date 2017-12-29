@@ -1,13 +1,13 @@
 package kz.greetgo.sandbox.controller.model;
 
 public class ClientRecord {
-  public String id;
+  public int id;
   public String fio;
   public String charm;
   public int age;
-  public int totalBalance;
-  public int maxBalance;
-  public int minBalance;
+  public float totalBalance;
+  public float maxBalance;
+  public float minBalance;
 
   public static Builder newBuilder(){
     return new ClientRecord().new Builder();
@@ -16,7 +16,7 @@ public class ClientRecord {
   public class Builder{
     private Builder() {}
 
-    public Builder setId(String id){
+    public Builder setId(int id){
       ClientRecord.this.id = id;
       return this;
     }
@@ -36,17 +36,17 @@ public class ClientRecord {
       return this;
     }
 
-    public Builder setTotalBalance(int totalBalance){
+    public Builder setTotalBalance(float totalBalance){
       ClientRecord.this.totalBalance = totalBalance;
       return this;
     }
 
-    public Builder setMaxBalance(int maxBalance){
+    public Builder setMaxBalance(float maxBalance){
       ClientRecord.this.maxBalance = maxBalance;
       return this;
     }
 
-    public Builder setMinBalance(int minBalance){
+    public Builder setMinBalance(float minBalance){
       ClientRecord.this.minBalance = minBalance;
       return this;
     }

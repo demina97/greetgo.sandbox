@@ -2,7 +2,7 @@ package kz.greetgo.sandbox.db.stand.model;
 
 import java.sql.Timestamp;
 
-public class ClientAccountDot {
+public class ClientAccountDot implements Comparable<ClientAccountDot>{
   public int id;
   public int client;
   public float money;
@@ -11,8 +11,16 @@ public class ClientAccountDot {
 
   private ClientAccountDot() {}
 
+  public float getMoney(){
+    return this.money;
+  }
   public static Builder newBuilder() {
     return new ClientAccountDot().new Builder();
+  }
+
+  @Override
+  public int compareTo(ClientAccountDot clientAccountDot) {
+    return Float.compare(money, clientAccountDot.money);
   }
 
   public class Builder {
@@ -32,6 +40,8 @@ public class ClientAccountDot {
       ClientAccountDot.this.money = money;
       return this;
     }
+
+
 
     public Builder setNumber(String number) {
       ClientAccountDot.this.number = number;
