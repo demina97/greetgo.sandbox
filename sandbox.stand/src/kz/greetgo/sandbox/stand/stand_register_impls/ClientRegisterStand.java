@@ -2,19 +2,12 @@ package kz.greetgo.sandbox.stand.stand_register_impls;
 
 import kz.greetgo.depinject.core.Bean;
 import kz.greetgo.depinject.core.BeanGetter;
-import kz.greetgo.sandbox.controller.model.CharmsList;
-import kz.greetgo.sandbox.controller.model.ClientListDetails;
-import kz.greetgo.sandbox.controller.model.ClientRecord;
+import kz.greetgo.sandbox.controller.model.*;
 import kz.greetgo.sandbox.controller.register.ClientRegister;
 import kz.greetgo.sandbox.db.stand.beans.StandDb;
-import kz.greetgo.sandbox.db.stand.model.CharmDot;
 import kz.greetgo.sandbox.db.stand.model.ClientAccountDot;
-import kz.greetgo.sandbox.db.stand.model.ClientDot;
 
-import java.time.LocalDate;
-import java.time.Year;
-import java.time.temporal.ChronoUnit;
-import java.util.*;
+import java.util.Date;
 
 @Bean
 public class ClientRegisterStand implements ClientRegister {
@@ -23,7 +16,7 @@ public class ClientRegisterStand implements ClientRegister {
 
   @Override
   public ClientListDetails getClientList() {
-    ClientListDetails clientListDetails=new ClientListDetails();
+    ClientListDetails clientListDetails = new ClientListDetails();
 
     db.get().clientStorage.values().forEach(r -> clientListDetails.clientInfoList.add(ClientRecord.newBuilder()
       .setId(r.id)
@@ -31,11 +24,10 @@ public class ClientRegisterStand implements ClientRegister {
       .setCharm(db.get().charmStorage.get(r.charm + "").name)
       .setAge((int) Math.floor((new Date().getTime() - r.birth_date.getTime()) / 3.156e+10))
       .setTotalBalance(getTotalBalance(r.id))
-      .setMinBalance(db.get().accountClientMapStorage.get(r.id+"")
+      .setMinBalance(db.get().accountClientMapStorage.get(r.id + "")
         .stream().min(ClientAccountDot::compareTo).get().getMoney())
-      .setMaxBalance(db.get().accountClientMapStorage.get(r.id+"")
+      .setMaxBalance(db.get().accountClientMapStorage.get(r.id + "")
         .stream().max(ClientAccountDot::compareTo).get().getMoney()).build()));
-
     return clientListDetails;
   }
 
@@ -43,16 +35,35 @@ public class ClientRegisterStand implements ClientRegister {
   public CharmsList getCharmsList() {
     CharmsList charmsList = new CharmsList();
 
-    //db.get().charmStorage.values().forEach();
+    db.get().charmStorage.values().forEach(r -> charmsList.listOfCharms.add(CharmModel.newBuilder()
+      .setId(r.id)
+      .setName(r.name)
+      .build()));
+    return charmsList;
+  }
+
+  @Override
+  public ClientDetailsRecord getClientInfo(String clientId) {
+
+
+//    ClientDot r=db.get().clientStorage.get(clientId);
+//
+//    return ClientInfo.newBuilder()
+//      .setId(r.id)
+//      .setSurname(r.surname)
+//      .setName(r.name)
+//      .setPatronymic(r.patronymic)
+//      .setAge(r.age)
+//      .build();
+
     return null;
   }
 
   private float getTotalBalance(int id) {
     float result = 0;
-    for (ClientAccountDot dot : db.get().accountClientMapStorage.get(id+"")) {
+    for (ClientAccountDot dot : db.get().accountClientMapStorage.get(id + "")) {
       result += dot.money;
     }
-
     return result;
   }
 

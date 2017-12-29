@@ -14,7 +14,7 @@ public class CharmDot {
 
   public class Builder {
 
-    public Builder setCharm(int charm) {
+    public Builder setId(int id) {
       CharmDot.this.id = id;
       return this;
     }

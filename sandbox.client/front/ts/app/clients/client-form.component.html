@@ -30,8 +30,8 @@
       <div class="field">
         <label>Характер</label>
         <select id="selectCharm" name="charm" ngModel="{{client.charm}}">
-          <option *ngFor="let charm of charms" value="charm">
-            {{charm}}
+          <option *ngFor="let charm of charms" value="charm.id">
+            {{charm.name}}
           </option>
         </select>
       </div>
