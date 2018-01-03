@@ -2,6 +2,7 @@ import {Component, OnInit, ViewChild} from "@angular/core";
 import {HttpService} from "../HttpService";
 import {ClientRecord} from "../../model/ClientRecord";
 import {ClientFormComponent} from "./client-form.component";
+import {ClientDetailsRecord} from "../../model/ClientDetailsRecord";
 
 @Component({
   selector: "client-list",
@@ -12,6 +13,7 @@ export class ClientListComponent implements OnInit {
   constructor(private httpService: HttpService) {}
 
   list: ClientRecord[] = [];
+  client: ClientDetailsRecord = new ClientDetailsRecord();
   selectedId: string | null = "a10";
 
   @ViewChild("clientForm") clientForm: ClientFormComponent;

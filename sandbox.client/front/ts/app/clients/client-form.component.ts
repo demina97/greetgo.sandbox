@@ -1,8 +1,7 @@
-import {Component, EventEmitter, OnInit, Output} from "@angular/core";
+import {Component, OnInit} from "@angular/core";
 import {ClientDetailsRecord} from "../../model/ClientDetailsRecord";
 import {HttpService} from "../HttpService";
 import {CharmModel} from "../../model/CharmModel";
-import {error} from "util";
 
 
 @Component({
@@ -30,6 +29,17 @@ export class ClientFormComponent implements OnInit {
   show(clientId: string | null) {
     this.clientId = clientId;
     this.shown = true;
+    console.log(clientId);
+    if (clientId === null) {
+      this.client = new ClientDetailsRecord();
+    } else {
+      this.httpService.get("/client/info", {"clientId": this.clientId}).toPromise().then(result => {
+        this.client = result.json() as ClientDetailsRecord;
+        console.log(this.client);
+      }, error => {
+        console.log(error);
+      })
+    }
   }
-
 }
+

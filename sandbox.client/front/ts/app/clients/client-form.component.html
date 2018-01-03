@@ -19,8 +19,8 @@
       <div class="field">
         <label>Пол</label>
         <div class="radioButton">
-          <p><input name="gender" type="radio" value="male" ngModel="{{client.gender}}"/>Мужской</p>
-          <p><input name="gender" type="radio" value="female" ngModel="{{client.gender}}"/>Женский</p>
+          <p><input type="radio" ngModel="{{client.gender}}" name="gender"  value="MALE"/>Мужской</p>
+          <p><input type="radio" ngModel="{{client.gender}}" name="gender" value="FEMALE"/>Женский</p>
         </div>
       </div>
       <div class="field">
@@ -30,7 +30,7 @@
       <div class="field">
         <label>Характер</label>
         <select id="selectCharm" name="charm" ngModel="{{client.charm}}">
-          <option *ngFor="let charm of charms" value="charm.id">
+          <option *ngFor="let charm of charms" value="{{charm.id}}" [selected]="charm.id == client.charm">
             {{charm.name}}
           </option>
         </select>
