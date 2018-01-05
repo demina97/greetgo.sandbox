@@ -1,5 +1,4 @@
 <div>
-
   <table class="client-list">
     <tbody>
     <tr>
@@ -24,12 +23,21 @@
   </table>
   <div>
     <button class="buttonStyle editingButtons" (click)="addClient()">+</button>
-
     <button class="buttonStyle editingButtons" (click)="editClient()" [disabled]="!selectedId">...</button>
-
-    <button class="buttonStyle editingButtons">-</button>
+    <button class="buttonStyle editingButtons" (click)="deleteClient()" [disabled]="!selectedId">-</button>
   </div>
 
   <client-form #clientForm></client-form>
 
+  <div style="margin-top: 150px; float: left; margin-left: 800px" class="container">
+    <ul class="pagination pagination-sm pager">
+      <li class="previous"><a href="#">previous</a></li>
+      <li><a href="#">1</a></li>
+      <li><a href="#">2</a></li>
+      <li><a href="#">3</a></li>
+      <li><a href="#">4</a></li>
+      <li><a href="#">5</a></li>
+      <li class="next"><a href="#">next</a> </li>
+    </ul>
+  </div>
 </div>

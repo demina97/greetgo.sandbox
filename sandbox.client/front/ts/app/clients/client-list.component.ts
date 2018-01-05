@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from "@angular/core";
+import {Component, EventEmitter, OnInit, Output, ViewChild} from "@angular/core";
 import {HttpService} from "../HttpService";
 import {ClientRecord} from "../../model/ClientRecord";
 import {ClientFormComponent} from "./client-form.component";
@@ -14,18 +14,20 @@ export class ClientListComponent implements OnInit {
 
   list: ClientRecord[] = [];
   client: ClientDetailsRecord = new ClientDetailsRecord();
-  selectedId: string | null = "a10";
+  selectedId: string | null;
 
   @ViewChild("clientForm") clientForm: ClientFormComponent;
-
   ngOnInit(): void {
+    this.getClientList();
+  }
+
+  getClientList(){
     this.httpService.get("/client/list").toPromise().then(result => {
       this.list = result.json().clientInfoList.map(a => ClientRecord.copy(a));
       console.log(this.list);
     }, error => {
       console.log(error);
     });
-
   }
 
   addClient() {
@@ -35,4 +37,18 @@ export class ClientListComponent implements OnInit {
   editClient() {
     this.clientForm.show(this.selectedId);
   }
+
+  deleteClient() {
+    let q = window.confirm("Вы действительно хотите удалить данные о клиенте?");
+    if (q) {
+      this.httpService.get("/client/delete", {"clientId": this.selectedId}).toPromise().then(result => {
+          window.alert("Данные о клиенте удалены.");
+          this.ngOnInit();
+        }, error => {
+          console.log(error);
+        }
+      );
+    }
+  }
+
 }

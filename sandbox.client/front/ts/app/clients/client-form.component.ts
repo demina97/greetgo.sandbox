@@ -2,6 +2,8 @@ import {Component, OnInit} from "@angular/core";
 import {ClientDetailsRecord} from "../../model/ClientDetailsRecord";
 import {HttpService} from "../HttpService";
 import {CharmModel} from "../../model/CharmModel";
+import {ClientRecord} from "../../model/ClientRecord";
+import {ClientListComponent} from "./client-list.component";
 
 
 @Component({
@@ -9,11 +11,12 @@ import {CharmModel} from "../../model/CharmModel";
   template: require('./client-form.component.html'),
 })
 export class ClientFormComponent implements OnInit {
+  constructor(private httpService: HttpService) {}
+
   shown: boolean = false;
   client: ClientDetailsRecord = new ClientDetailsRecord();
   charms: CharmModel[] = [];
-
-  constructor(private httpService: HttpService) {}
+  clientList:ClientListComponent|null;
 
   ngOnInit(): void {
     this.httpService.get("/client/charms").toPromise().then(result => {
@@ -41,5 +44,31 @@ export class ClientFormComponent implements OnInit {
       })
     }
   }
+
+  saveClient() {
+    if (this.clientId == null) {
+      let q = window.confirm("Сохранить данные о новом клиенте?");
+      if (q) {
+        this.httpService.post("/client/save", {"clientToSave": JSON.stringify(this.client)}).toPromise().then(result => {
+          window.alert("Данные о клиенте сохранены.");
+          console.log(this.client);
+        }, error => {
+          console.log(error);
+        });
+      }
+    }
+    else {
+      let q = window.confirm("Сохранить изменения об этом клиенте?");
+      if (q) {
+        this.httpService.post("/client/save", {"clientToSave": JSON.stringify(this.client)}).toPromise().then(result => {
+          window.alert("Данные о клиенте изменены.");
+          console.log(this.client);
+        }, error => {
+          console.log(error);
+        });
+      }
+    }
+  }
+
 }
 
