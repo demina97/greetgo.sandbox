@@ -1,10 +1,11 @@
 export class ClientDetailsRecord{
+  public id: number/*int*/;
   public surname: string;
   public name: string;
   public patronymic: string;
   public gender: string;
   public birth_date: string;
-  public charm: string;
+  public charm: number/*int*/;
   public factAddrStreet: string;
   public factAddrHouse: string;
   public factAddrFlat: string;

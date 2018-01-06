@@ -12,7 +12,7 @@ import {HttpService} from "../HttpService";
       </div>
       
       <div id="exitButton" >
-        <button class="buttonStyle" (click)="exit.emit()">Выход</button>
+        <button class="btn btn-primary" (click)="exit.emit()">Выход</button>
       </div>
       
       <client-list></client-list>

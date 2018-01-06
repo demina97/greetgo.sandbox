@@ -2,15 +2,13 @@ package kz.greetgo.sandbox.db.stand.model;
 
 import kz.greetgo.sandbox.controller.model.Gender;
 
-import java.util.Date;
-
 public class ClientDot {
   public int id;
   public String surname;
   public String name;
   public String patronymic;
   public Gender gender;
-  public Date birth_date;
+  public String birth_date;
   public int charm;
 
   private ClientDot() {}
@@ -47,7 +45,7 @@ public class ClientDot {
       return this;
     }
 
-    public Builder setBirth_date(Date birth_date) {
+    public Builder setBirth_date(String birth_date) {
       ClientDot.this.birth_date = birth_date;
       return this;
     }
