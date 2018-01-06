@@ -50,7 +50,9 @@ public class ClientController implements Controller {
 
   @ToJson
   @Mapping("/page")
-  public ClientPage getClientPage(@Par("numOfPage") int pageNum, @Par("numOfClients") int numOfClients) {
-    return clientRegister.get().getClientPage(pageNum, numOfClients);
+  public ClientPage getClientPage(@Par("numOfPage") int pageNum, @Par("numOfClients") int numOfClients,
+                                  @Par("filtrSurname") String filtrSurname, @Par("filtrName") String filtrName,
+                                  @Par("filtrPatronymic") String filtrPatronymic) {
+    return clientRegister.get().getClientPage(pageNum, numOfClients, filtrSurname, filtrName, filtrPatronymic);
   }
 }

@@ -3,8 +3,6 @@ import {HttpService} from "../HttpService";
 import {ClientRecord} from "../../model/ClientRecord";
 import {ClientFormComponent} from "./client-form.component";
 import {ClientDetailsRecord} from "../../model/ClientDetailsRecord";
-import {ClientPage} from "../../model/ClientPage";
-import {copyObj} from "@angular/animations/browser/src/util";
 
 @Component({
   selector: "client-list",
@@ -16,16 +14,22 @@ export class ClientListComponent implements OnInit {
 
   list: ClientRecord[] = [];
   listForPage: ClientRecord[] = [];
+
   client: ClientDetailsRecord = new ClientDetailsRecord();
   selectedId: string | null;
+
   selectedPage: number | null = 1;
   numOfClientsOnPage: number = 10;
   totalPages: number[];
 
+  filtrSurname: string | null;
+  filtrName: string | null;
+  filtrPatronymic: string | null;
+
   @ViewChild("clientForm") clientForm: ClientFormComponent;
 
   ngOnInit(): void {
-    this.getClientPage(this.selectedPage, this.numOfClientsOnPage);
+    this.getClientPage(this.selectedPage, this.numOfClientsOnPage, this.filtrSurname, this.filtrName, this.filtrPatronymic);
   }
 
   getClientList() {
@@ -37,13 +41,17 @@ export class ClientListComponent implements OnInit {
     });
   }
 
-  getClientPage(selectedPage, numOfClientsOnPage) {
+  getClientPage(selectedPage, numOfClientsOnPage, filtrSurname, filtrName, filtrPatronymic) {
     this.httpService.get("/client/page", {
       "numOfPage": this.selectedPage,
-      "numOfClients": this.numOfClientsOnPage
+      "numOfClients": this.numOfClientsOnPage,
+      "filtrSurname": this.filtrSurname,
+      "filtrName": this.filtrName,
+      "filtrPatronymic": this.filtrPatronymic
     }).toPromise().then(result => {
       this.listForPage = result.json().pageOfClients.map(a => ClientRecord.copy(a));
       this.totalPages = result.json().totalPages;
+      this.selectedPage = result.json().pageNum;
       console.log(this.listForPage);
       console.log(this.totalPages)
     }, error => {

@@ -13,11 +13,9 @@ import org.fest.util.Strings;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @Bean
@@ -49,20 +47,46 @@ public class ClientRegisterStand implements ClientRegister {
   }
 
   @Override
-  public ClientPage getClientPage(int pageNum, int numOfClients) {
+  public ClientPage getClientPage(int pageNum, int numOfClients,
+                                  String filtrSurname, String filtrName, String filtrPatronymic) {
     ClientPage clientPage = new ClientPage();
     ClientList clientList = getClientList();
 
+    List<ClientRecord> result =
+      clientList.clientInfoList
+        .stream()
+        .filter(clientRecord -> {
+          boolean p = true;
+          if (!Strings.isNullOrEmpty(filtrSurname)) {
+            p = clientRecord.fio.startsWith(filtrSurname);
+          }
+          if (!Strings.isNullOrEmpty(filtrName)) {
+            p = clientRecord.fio.contains(filtrName);
+          }
+          if (!Strings.isNullOrEmpty(filtrPatronymic)) {
+            p = clientRecord.fio.endsWith(filtrPatronymic);
+          }
+          return p;
+        })
+        /*.sorted((clientRecord, t1) -> {
+
+        })*/
+        .collect(Collectors.toList());
+
     for (int i = (pageNum - 1) * numOfClients; i < (pageNum - 1) * numOfClients + numOfClients; i++) {
-      if(i < clientList.clientInfoList.size())
-      clientPage.pageOfClients.add(clientList.clientInfoList.get(i));
+      if (i < result.size())
+        clientPage.pageOfClients.add(result.get(i));
     }
 
-    int pages = (int) (Math.ceil((clientList.clientInfoList.size() / (double)numOfClients)));
-    System.out.println(pages);
+    int pages = (int) (Math.ceil((result.size() / (double) numOfClients)));
     for (int i = 0; i < pages; i++) {
       clientPage.totalPages.add(i + 1);
     }
+
+    if(pageNum > clientPage.totalPages.size())
+      clientPage.pageNum = 1;
+    else
+      clientPage.pageNum = pageNum;
     return clientPage;
   }
 
