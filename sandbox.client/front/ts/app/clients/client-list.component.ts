@@ -60,12 +60,12 @@ export class ClientListComponent implements OnInit {
       this.listForPage = result.json().pageOfClients.map(a => ClientRecord.copy(a));
       this.totalPages = result.json().totalPages;
       this.selectedPage = result.json().pageNum;
-      
       console.log(this.listForPage);
       console.log(this.totalPages)
     }, error => {
       console.log(error);
     })
+      this.selectedId = null;
   }
 
   addClient() {
