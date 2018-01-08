@@ -17,5 +17,6 @@ public interface ClientRegister {
   ClientDetailsRecord deleteClient(String clientId);
 
   ClientPage getClientPage(int pageNum, int numOfClients,
-                           String filtrSurname, String filtrName, String filtrPatronymic, String sortType, int sortDirect);
+                           String filtrSurname, String filtrName, String filtrPatronymic,
+                           String sortType, int sortDirect);
 }

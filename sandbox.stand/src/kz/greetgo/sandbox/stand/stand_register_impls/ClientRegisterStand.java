@@ -72,13 +72,13 @@ public class ClientRegisterStand implements ClientRegister {
         .sorted((c1, c2) -> {
           switch (sortType) {
             case "age":
-              return  (sortDirect * Integer.compare(c1.age, c2.age));
+              return (sortDirect * Integer.compare(c1.age, c2.age));
             case "totalScore":
-              return  (sortDirect * Float.compare(c1.totalBalance, c2.totalBalance));
+              return (sortDirect * Float.compare(c1.totalBalance, c2.totalBalance));
             case "maxScore":
-              return  (sortDirect * Float.compare(c1.maxBalance, c2.maxBalance));
+              return (sortDirect * Float.compare(c1.maxBalance, c2.maxBalance));
             case "minScore":
-              return  (sortDirect * Float.compare(c1.minBalance, c2.minBalance));
+              return (sortDirect * Float.compare(c1.minBalance, c2.minBalance));
             default:
               return 0;
           }
@@ -141,8 +141,9 @@ public class ClientRegisterStand implements ClientRegister {
     if (clientDetailsRecord == null)
       return null;
 
-    if (Strings.isNullOrEmpty(clientDetailsRecord.id + ""))
-      clientDetailsRecord.id = db.get().clientSeq.getAndIncrement();
+    if (clientDetailsRecord.id == 0) {
+      clientDetailsRecord.id = db.get().clientStorage.values().stream().max(ClientDot::compareTo).get().id + 1;
+    }
 
     db.get().clientStorage.put(clientDetailsRecord.id + "", ClientDot.newBuilder()
       .setId(clientDetailsRecord.id)

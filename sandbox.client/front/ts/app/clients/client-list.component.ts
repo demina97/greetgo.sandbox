@@ -4,7 +4,6 @@ import {ClientRecord} from "../../model/ClientRecord";
 import {ClientFormComponent} from "./client-form.component";
 import {ClientDetailsRecord} from "../../model/ClientDetailsRecord";
 import {SortType} from "../../model/SortType";
-import {runInThisContext} from "vm";
 
 @Component({
   selector: "client-list",
@@ -64,7 +63,7 @@ export class ClientListComponent implements OnInit {
       console.log(this.totalPages)
     }, error => {
       console.log(error);
-    })
+    });
       this.selectedId = null;
   }
 
