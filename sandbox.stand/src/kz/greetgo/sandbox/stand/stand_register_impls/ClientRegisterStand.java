@@ -48,7 +48,8 @@ public class ClientRegisterStand implements ClientRegister {
 
   @Override
   public ClientPage getClientPage(int pageNum, int numOfClients,
-                                  String filtrSurname, String filtrName, String filtrPatronymic) {
+                                  String filtrSurname, String filtrName, String filtrPatronymic,
+                                  String sortType, int sortDirect) {
     ClientPage clientPage = new ClientPage();
     ClientList clientList = getClientList();
 
@@ -68,9 +69,20 @@ public class ClientRegisterStand implements ClientRegister {
           }
           return p;
         })
-        /*.sorted((clientRecord, t1) -> {
-
-        })*/
+        .sorted((c1, c2) -> {
+          switch (sortType) {
+            case "age":
+              return  (sortDirect * Integer.compare(c1.age, c2.age));
+            case "totalScore":
+              return  (sortDirect * Float.compare(c1.totalBalance, c2.totalBalance));
+            case "maxScore":
+              return  (sortDirect * Float.compare(c1.maxBalance, c2.maxBalance));
+            case "minScore":
+              return  (sortDirect * Float.compare(c1.minBalance, c2.minBalance));
+            default:
+              return 0;
+          }
+        })
         .collect(Collectors.toList());
 
     for (int i = (pageNum - 1) * numOfClients; i < (pageNum - 1) * numOfClients + numOfClients; i++) {
@@ -83,7 +95,7 @@ public class ClientRegisterStand implements ClientRegister {
       clientPage.totalPages.add(i + 1);
     }
 
-    if(pageNum > clientPage.totalPages.size())
+    if (pageNum > clientPage.totalPages.size())
       clientPage.pageNum = 1;
     else
       clientPage.pageNum = pageNum;

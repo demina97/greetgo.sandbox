@@ -15,10 +15,23 @@
       <tr>
         <th>ФИО</th>
         <th>Характер</th>
-        <th>Возраст</th>
-        <th>Общий остаток счетов</th>
-        <th>Максимальный остаток</th>
-        <th>Минимальный остаток</th>
+        <th (click)="changeSort('age')">Возраст
+          <span *ngIf="sortDirection == 1 && sortType == 'age'">&nbsp;&uarr;</span>
+          <span *ngIf="sortDirection == -1 && sortType == 'age'">&nbsp;&darr;</span>
+          <span *ngIf="sortType != 'age'">&nbsp;&middot;</span>
+        </th>
+        <th (click)="changeSort('totalScore')">Общий остаток счетов
+          <span *ngIf="sortDirection == 1 && sortType == 'totalScore'">&nbsp;&uarr;</span>
+          <span *ngIf="sortDirection == -1 && sortType == 'totalScore'">&nbsp;&darr;</span>
+          <span *ngIf="sortType != 'totalScore'">&nbsp;&middot;</span></th>
+        <th (click)="changeSort('maxScore')">Максимальный остаток
+          <span *ngIf="sortDirection == 1 && sortType == 'maxScore'">&nbsp;&uarr;</span>
+          <span *ngIf="sortDirection == -1 && sortType == 'maxScore'">&nbsp;&darr;</span>
+          <span *ngIf="sortType != 'maxScore'">&nbsp;&middot;</span></th>
+        <th (click)="changeSort('minScore')">Минимальный остаток
+          <span *ngIf="sortDirection == 1 && sortType == 'minScore'">&nbsp;&uarr;</span>
+          <span *ngIf="sortDirection == -1 && sortType == 'minScore'">&nbsp;&darr;</span>
+          <span *ngIf="sortType != 'minScore'">&nbsp;&middot;</span></th>
       </tr>
 
       <tr *ngFor="let record of listForPage" [ngClass]="{active: selectedId === record.id}"

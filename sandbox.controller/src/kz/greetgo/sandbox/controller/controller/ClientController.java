@@ -52,7 +52,9 @@ public class ClientController implements Controller {
   @Mapping("/page")
   public ClientPage getClientPage(@Par("numOfPage") int pageNum, @Par("numOfClients") int numOfClients,
                                   @Par("filtrSurname") String filtrSurname, @Par("filtrName") String filtrName,
-                                  @Par("filtrPatronymic") String filtrPatronymic) {
-    return clientRegister.get().getClientPage(pageNum, numOfClients, filtrSurname, filtrName, filtrPatronymic);
+                                  @Par("filtrPatronymic") String filtrPatronymic,
+                                  @Par("sortType") String sortType, @Par("sortDirect") int sortDirect) {
+    return clientRegister.get().getClientPage(pageNum, numOfClients,
+                                  filtrSurname, filtrName, filtrPatronymic, sortType, sortDirect);
   }
 }
