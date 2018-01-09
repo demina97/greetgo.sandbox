@@ -8,10 +8,12 @@ import kz.greetgo.mvc.annotations.Par;
 import kz.greetgo.mvc.annotations.ToJson;
 import kz.greetgo.sandbox.controller.model.CharmsList;
 import kz.greetgo.sandbox.controller.model.ClientDetailsRecord;
-import kz.greetgo.sandbox.controller.model.ClientList;
-import kz.greetgo.sandbox.controller.model.ClientPage;
+import kz.greetgo.sandbox.controller.model.ClientRecord;
 import kz.greetgo.sandbox.controller.register.ClientRegister;
 import kz.greetgo.sandbox.controller.util.Controller;
+import org.fest.util.Strings;
+
+import java.util.List;
 
 @Bean
 @Mapping("/client")
@@ -20,8 +22,13 @@ public class ClientController implements Controller {
 
   @ToJson
   @Mapping("/list")
-  public ClientList getClientList() {
-    return clientRegister.get().getClientList();
+  public List<ClientRecord> getClientList(@Par("numOfPage") int pageNum, @Par("numOfClients") int numOfClients,
+                                          @Par("filtrSurname") String filtrSurname,
+                                          @Par("filtrName") String filtrName,
+                                          @Par("filtrPatronymic") String filtrPatronymic,
+                                          @Par("sortType") String sortType, @Par("sortDirect") int sortDirect) {
+    return clientRegister.get().getClientList(pageNum, numOfClients,
+      filtrSurname, filtrName, filtrPatronymic, sortType, sortDirect);
   }
 
   @ToJson
@@ -49,12 +56,14 @@ public class ClientController implements Controller {
   }
 
   @ToJson
-  @Mapping("/page")
-  public ClientPage getClientPage(@Par("numOfPage") int pageNum, @Par("numOfClients") int numOfClients,
-                                  @Par("filtrSurname") String filtrSurname, @Par("filtrName") String filtrName,
-                                  @Par("filtrPatronymic") String filtrPatronymic,
-                                  @Par("sortType") String sortType, @Par("sortDirect") int sortDirect) {
-    return clientRegister.get().getClientPage(pageNum, numOfClients,
-                                  filtrSurname, filtrName, filtrPatronymic, sortType, sortDirect);
+  @Mapping("/size")
+  public Long getSize(@Par("numOfPage") int pageNum, @Par("numOfClients") int numOfClients,
+                      @Par("filtrSurname") String filtrSurname,
+                      @Par("filtrName") String filtrName,
+                      @Par("filtrPatronymic") String filtrPatronymic,
+                      @Par("sortType") String sortType, @Par("sortDirect") int sortDirect) {
+    return clientRegister.get().getSize(pageNum, numOfClients,
+      filtrSurname, filtrName, filtrPatronymic, sortType, sortDirect);
   }
+
 }

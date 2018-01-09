@@ -4,5 +4,5 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ClientList {
-  public List<ClientRecord> clientInfoList=new ArrayList<>();
+  public List<ClientRecord> pageOfClients = new ArrayList<>();
 }

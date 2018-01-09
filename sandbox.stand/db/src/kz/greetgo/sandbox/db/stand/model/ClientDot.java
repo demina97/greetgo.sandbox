@@ -2,7 +2,7 @@ package kz.greetgo.sandbox.db.stand.model;
 
 import kz.greetgo.sandbox.controller.model.Gender;
 
-public class ClientDot {
+public class ClientDot implements Comparable<ClientDot> {
   public int id;
   public String surname;
   public String name;
@@ -12,6 +12,11 @@ public class ClientDot {
   public int charm;
 
   private ClientDot() {}
+
+  @Override
+  public int compareTo(ClientDot clientDot) {
+    return Integer.compare(id, clientDot.id);
+  }
 
   public static Builder newBuilder() {
     return new ClientDot().new Builder();

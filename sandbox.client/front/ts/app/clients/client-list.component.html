@@ -3,7 +3,8 @@
   <label style="padding-left: 16px">Имя<br><input type="text" [(ngModel)]="filtrName"/></label>
   <label style="padding-left: 16px">Отчество<br><input type="text" [(ngModel)]="filtrPatronymic"/></label>
   <button class="btn btn-primary" style="margin: 16px 16px"
-          (click)="getClientPage(selectedPage, numOfClientsOnPage, filtrSurname, filtrName, filtrPatronymic)">
+          (click)="getClientsNum(); selectedPage = 1; getClientList(selectedPage, numOfClientsOnPage,
+          filtrSurname, filtrName, filtrPatronymic, sortType, sortDirection); ">
     Фильтровать
   </button>
 </div>
@@ -58,13 +59,22 @@
   <div class="container pagLocation">
     <ul class="pagination pagination-sm pager">
       <li class="previous" [ngClass]="{disabled:selectedPage === 1}">
-        <a (click)="selectedPage = 1; getClientPage(selectedPage, numOfClientsOnPage)">Начало</a>
+        <a
+          (click)="selectedPage = 1; getClientList(selectedPage, numOfClientsOnPage,
+          filtrSurname, filtrName, filtrPatronymic, sortType, sortDirection)">
+          Начало</a>
       </li>
       <li *ngFor="let page of totalPages" [ngClass]="{active: selectedPage === page}"><a
-        (click)="selectedPage = page; getClientPage(selectedPage, numOfClientsOnPage)">{{page}}</a>
+        (click)="selectedPage = page; getClientList(selectedPage, numOfClientsOnPage,
+        filtrSurname, filtrName, filtrPatronymic, sortType, sortDirection)">
+        {{page}}</a>
       </li>
       <li class="next" [ngClass]="{disabled:selectedPage === totalPages.length}">
-        <a (click)="selectedPage = totalPages.length; getClientPage(selectedPage, numOfClientsOnPage)">Конец</a></li>
+        <a
+          (click)="selectedPage = totalPages.length;
+          getClientList(selectedPage, numOfClientsOnPage,
+          filtrSurname, filtrName, filtrPatronymic, sortType, sortDirection)">Конец</a>
+      </li>
     </ul>
   </div>
 </div>

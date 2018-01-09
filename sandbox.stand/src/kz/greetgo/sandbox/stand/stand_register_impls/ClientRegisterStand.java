@@ -13,6 +13,7 @@ import org.fest.util.Strings;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -24,14 +25,16 @@ public class ClientRegisterStand implements ClientRegister {
   public BeanGetter<StandDb> db;
 
   @Override
-  public ClientList getClientList() {
-    ClientList clientList = new ClientList();
-
+  public List<ClientRecord> getClientList(int pageNum, int numOfClients,
+                                          String filtrSurname, String filtrName, String filtrPatronymic,
+                                          String sortType, int sortDirect) {
+    List<ClientRecord> clientList = new ArrayList<>();
+    List<ClientRecord> list = new ArrayList<>();
     SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
 
     db.get().clientStorage.values().forEach(r -> {
       try {
-        clientList.clientInfoList.add(ClientRecord.newBuilder()
+        list.add(ClientRecord.newBuilder()
           .setId(r.id)
           .setFio(r.surname + " " + r.name + " " + r.patronymic)
           .setCharm(db.get().charmStorage.get(r.charm + "").name)
@@ -43,63 +46,101 @@ public class ClientRegisterStand implements ClientRegister {
         e.printStackTrace();
       }
     });
+
+    List<ClientRecord> result = list.stream().sorted((c1, c2) -> {
+      switch (sortType) {
+        case "age":
+          return (sortDirect * Integer.compare(c1.age, c2.age));
+        case "totalScore":
+          return (sortDirect * Float.compare(c1.totalBalance, c2.totalBalance));
+        case "maxScore":
+          return (sortDirect * Float.compare(c1.maxBalance, c2.maxBalance));
+        case "minScore":
+          return (sortDirect * Float.compare(c1.minBalance, c2.minBalance));
+        default:
+          return 0;
+      }
+    }).filter(clientRecord -> {
+      boolean p = true;
+      if (!Strings.isNullOrEmpty(filtrSurname)) {
+        p = clientRecord.fio.startsWith(filtrSurname);
+      }
+      if (!Strings.isNullOrEmpty(filtrName)) {
+        p = clientRecord.fio.contains(filtrName);
+      }
+      if (!Strings.isNullOrEmpty(filtrPatronymic)) {
+        p = clientRecord.fio.endsWith(filtrPatronymic);
+      }
+      return p;
+    })
+      .collect(Collectors.toList());
+
+    for (int i = (pageNum - 1) * numOfClients; i < (pageNum - 1) * numOfClients + numOfClients; i++) {
+      if (i < result.size())
+        clientList.add(result.get(i));
+    }
+
     return clientList;
   }
 
   @Override
-  public ClientPage getClientPage(int pageNum, int numOfClients,
-                                  String filtrSurname, String filtrName, String filtrPatronymic,
-                                  String sortType, int sortDirect) {
-    ClientPage clientPage = new ClientPage();
-    ClientList clientList = getClientList();
+  public Long getSize(int pageNum, int numOfClients,
+                      String filtrSurname, String filtrName, String filtrPatronymic,
+                      String sortType, int sortDirect) {
+    List<ClientRecord> clientList = new ArrayList<>();
+    List<ClientRecord> list = new ArrayList<>();
+    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
 
-    List<ClientRecord> result =
-      clientList.clientInfoList
-        .stream()
-        .filter(clientRecord -> {
-          boolean p = true;
-          if (!Strings.isNullOrEmpty(filtrSurname)) {
-            p = clientRecord.fio.startsWith(filtrSurname);
-          }
-          if (!Strings.isNullOrEmpty(filtrName)) {
-            p = clientRecord.fio.contains(filtrName);
-          }
-          if (!Strings.isNullOrEmpty(filtrPatronymic)) {
-            p = clientRecord.fio.endsWith(filtrPatronymic);
-          }
-          return p;
-        })
-        .sorted((c1, c2) -> {
-          switch (sortType) {
-            case "age":
-              return (sortDirect * Integer.compare(c1.age, c2.age));
-            case "totalScore":
-              return (sortDirect * Float.compare(c1.totalBalance, c2.totalBalance));
-            case "maxScore":
-              return (sortDirect * Float.compare(c1.maxBalance, c2.maxBalance));
-            case "minScore":
-              return (sortDirect * Float.compare(c1.minBalance, c2.minBalance));
-            default:
-              return 0;
-          }
-        })
-        .collect(Collectors.toList());
+    db.get().clientStorage.values().forEach(r -> {
+      try {
+        list.add(ClientRecord.newBuilder()
+          .setId(r.id)
+          .setFio(r.surname + " " + r.name + " " + r.patronymic)
+          .setCharm(db.get().charmStorage.get(r.charm + "").name)
+          .setAge((int) Math.floor((new Date().getTime() - format.parse(r.birth_date).getTime()) / 3.156e+10))
+          .setTotalBalance(getTotalBalance(r.id))
+          .setMinBalance(getMinBalance(r.id))
+          .setMaxBalance(getMaxBalance(r.id)).build());
+      } catch (ParseException e) {
+        e.printStackTrace();
+      }
+    });
+
+    List<ClientRecord> result = list.stream().sorted((c1, c2) -> {
+      switch (sortType) {
+        case "age":
+          return (sortDirect * Integer.compare(c1.age, c2.age));
+        case "totalScore":
+          return (sortDirect * Float.compare(c1.totalBalance, c2.totalBalance));
+        case "maxScore":
+          return (sortDirect * Float.compare(c1.maxBalance, c2.maxBalance));
+        case "minScore":
+          return (sortDirect * Float.compare(c1.minBalance, c2.minBalance));
+        default:
+          return 0;
+      }
+    }).filter(clientRecord -> {
+      boolean p = true;
+      if (!Strings.isNullOrEmpty(filtrSurname)) {
+        p = clientRecord.fio.startsWith(filtrSurname);
+      }
+      if (!Strings.isNullOrEmpty(filtrName)) {
+        p = clientRecord.fio.contains(filtrName);
+      }
+      if (!Strings.isNullOrEmpty(filtrPatronymic)) {
+        p = clientRecord.fio.endsWith(filtrPatronymic);
+      }
+      return p;
+    })
+      .collect(Collectors.toList());
 
     for (int i = (pageNum - 1) * numOfClients; i < (pageNum - 1) * numOfClients + numOfClients; i++) {
       if (i < result.size())
-        clientPage.pageOfClients.add(result.get(i));
+        clientList.add(result.get(i));
     }
 
-    int pages = (int) (Math.ceil((result.size() / (double) numOfClients)));
-    for (int i = 0; i < pages; i++) {
-      clientPage.totalPages.add(i + 1);
-    }
 
-    if (pageNum > clientPage.totalPages.size())
-      clientPage.pageNum = 1;
-    else
-      clientPage.pageNum = pageNum;
-    return clientPage;
+      return (long)result.size();
   }
 
   @Override

@@ -24,6 +24,7 @@ export class ClientListComponent implements OnInit {
 
   selectedPage: number | null = 1;
   numOfClientsOnPage: number = 10;
+  clientsNum: number = 0;
   totalPages: number[];
 
   filtrSurname: string | null;
@@ -33,21 +34,13 @@ export class ClientListComponent implements OnInit {
   @ViewChild("clientForm") clientForm: ClientFormComponent;
 
   ngOnInit(): void {
-    this.getClientPage(this.selectedPage, this.numOfClientsOnPage,
-      this.filtrSurname, this.filtrName, this.filtrPatronymic, this.sortType, this.sortDirection);
+    this.getClientsNum();
+    this.getClientList(this.selectedPage, this.numOfClientsOnPage, this.filtrSurname, this.filtrName,
+      this.filtrPatronymic, this.sortType, this.sortDirection);
   }
 
-  getClientList() {
-    this.httpService.get("/client/list").toPromise().then(result => {
-      this.list = result.json().clientInfoList.map(a => ClientRecord.copy(a));
-      console.log(this.list);
-    }, error => {
-      console.log(error);
-    });
-  }
-
-  getClientPage(selectedPage, numOfClientsOnPage, filtrSurname, filtrName, filtrPatronymic, sortType, sortDirection) {
-    this.httpService.get("/client/page", {
+  getClientList(selectedPage, numOfClientsOnPage, filtrSurname, filtrName, filtrPatronymic, sortType, sortDirection) {
+    this.httpService.get("/client/list", {
       "numOfPage": this.selectedPage,
       "numOfClients": this.numOfClientsOnPage,
       "filtrSurname": this.filtrSurname,
@@ -55,16 +48,40 @@ export class ClientListComponent implements OnInit {
       "filtrPatronymic": this.filtrPatronymic,
       "sortType": this.sortType,
       "sortDirect": this.sortDirection
-    }).toPromise().then(result => {
-      this.listForPage = result.json().pageOfClients.map(a => ClientRecord.copy(a));
-      this.totalPages = result.json().totalPages;
-      this.selectedPage = result.json().pageNum;
+    })
+      .toPromise().then(result => {
+      this.listForPage = result.json().map(a => ClientRecord.copy(a));
+      this.selectedId = null;
       console.log(this.listForPage);
-      console.log(this.totalPages)
     }, error => {
       console.log(error);
+    })
+  }
+
+  getClientsNum() {
+    this.httpService.get("/client/size", {
+      "numOfPage": this.selectedPage,
+      "numOfClients": this.numOfClientsOnPage,
+      "filtrSurname": this.filtrSurname,
+      "filtrName": this.filtrName,
+      "filtrPatronymic": this.filtrPatronymic,
+      "sortType": this.sortType,
+      "sortDirect": this.sortDirection
+    }
+    ).toPromise().then(result => {
+      this.clientsNum = result.json();
+      this.getTotalPages();
+      console.log(this.clientsNum);
     });
-      this.selectedId = null;
+  }
+
+  getTotalPages() {
+    this.totalPages = [];
+    var numOfPages = Math.ceil(this.clientsNum / 10);
+    for (var i = 0; i < numOfPages; i++) {
+      this.totalPages[i] = i + 1;
+    }
+    console.log(this.totalPages);
   }
 
   addClient() {
@@ -88,12 +105,12 @@ export class ClientListComponent implements OnInit {
     }
   }
 
-  changeSort(type: string){
+  changeSort(type: string) {
     if (!this.sortDirection) {
       this.sortDirection = 1;
     }
 
-    switch(type){
+    switch (type) {
       case "age":
         if (this.sortType != SortType.AGE) {
           this.sortType = SortType.AGE;
@@ -103,8 +120,8 @@ export class ClientListComponent implements OnInit {
         } else {
           this.sortDirection *= -1;
         }
-        this.getClientPage(this.selectedPage, this.numOfClientsOnPage,
-          this.filtrSurname, this.filtrName, this.filtrPatronymic, this.sortType, this.sortDirection);
+        this.getClientList(this.selectedPage, this.numOfClientsOnPage, this.filtrSurname, this.filtrName,
+          this.filtrPatronymic,this.sortType, this.sortDirection);
         break;
 
       case "totalScore":
@@ -114,8 +131,8 @@ export class ClientListComponent implements OnInit {
         } else {
           this.sortDirection *= -1;
         }
-        this.getClientPage(this.selectedPage, this.numOfClientsOnPage,
-          this.filtrSurname, this.filtrName, this.filtrPatronymic, this.sortType, this.sortDirection);
+        this.getClientList(this.selectedPage, this.numOfClientsOnPage, this.filtrSurname, this.filtrName,
+          this.filtrPatronymic,this.sortType, this.sortDirection);
         break;
 
       case "maxScore":
@@ -125,8 +142,8 @@ export class ClientListComponent implements OnInit {
         } else {
           this.sortDirection *= -1;
         }
-        this.getClientPage(this.selectedPage, this.numOfClientsOnPage,
-          this.filtrSurname, this.filtrName, this.filtrPatronymic, this.sortType, this.sortDirection);
+        this.getClientList(this.selectedPage, this.numOfClientsOnPage, this.filtrSurname, this.filtrName,
+          this.filtrPatronymic, this.sortType, this.sortDirection);
         break;
 
       case "minScore":
@@ -136,10 +153,9 @@ export class ClientListComponent implements OnInit {
         } else {
           this.sortDirection *= -1;
         }
-        this.getClientPage(this.selectedPage, this.numOfClientsOnPage,
-          this.filtrSurname, this.filtrName, this.filtrPatronymic, this.sortType, this.sortDirection);
+        this.getClientList(this.selectedPage, this.numOfClientsOnPage, this.filtrSurname, this.filtrName,
+          this.filtrPatronymic, this.sortType, this.sortDirection);
         break;
     }
   }
-
 }
